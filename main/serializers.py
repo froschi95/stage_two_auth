@@ -4,7 +4,7 @@ from .models import User, Organisation
 class UserSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
-        fields = ['user_id', 'first_name', 'last_name', 'email', 'password', 'phone']
+        fields = ['userId', 'firstName', 'lastName', 'email', 'password', 'phone']
         extra_kwargs = {
             'password': {'write_only': True},
         }
@@ -25,7 +25,7 @@ class UserSerializer(serializers.ModelSerializer):
 class OrganisationSerializer(serializers.ModelSerializer):
     class Meta:
         model = Organisation
-        fields = ['org_id', 'name', 'description']
+        fields = ['orgId', 'name', 'description']
 
 
 class LoginSerializer(serializers.Serializer):
@@ -34,5 +34,5 @@ class LoginSerializer(serializers.Serializer):
 
 
 class AddUserToOrganisationSerializer(serializers.Serializer):
-    user_id = serializers.UUIDField()
-    # org_id = serializers.UUIDField()
+    userId = serializers.UUIDField()
+    # orgId = serializers.UUIDField()

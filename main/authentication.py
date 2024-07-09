@@ -10,8 +10,8 @@ class EmailBackend(BaseBackend):
         except User.DoesNotExist:
             return None
 
-    def get_user(self, user_id):
+    def get_user(self, userId):
         try:
-            return User.objects.get(pk=user_id)
+            return User.objects.get(pk=userId)
         except User.DoesNotExist:
             return None

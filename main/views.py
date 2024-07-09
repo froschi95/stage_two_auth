@@ -19,7 +19,7 @@ class RegisterView(generics.CreateAPIView):
     def perform_create(self, serializer):
         try:
             user = serializer.save()
-            org_name = f"{user.first_name}'s Organisation"
+            org_name = f"{user.firstName}'s Organisation"
             org = Organisation.objects.create(name=org_name)
             org.users.set([user])
         except ValidationError as e:
@@ -106,7 +106,7 @@ class OrganisationDetailView(generics.RetrieveAPIView):
     queryset = Organisation.objects.all()
     serializer_class = OrganisationSerializer
     permission_classes = [IsAuthenticated]
-    lookup_field = 'org_id'
+    lookup_field = 'orgId'
 
     def get_object(self):
         obj = super().get_object()
@@ -137,9 +137,9 @@ class AddUserToOrganisationView(generics.GenericAPIView):
     serializer_class = AddUserToOrganisationSerializer
     permission_classes = [IsAuthenticated]
 
-    def post(self, request, org_id, *args, **kwargs):
+    def post(self, request, orgId, *args, **kwargs):
         try:
-            organisation = Organisation.objects.get(org_id=org_id)
+            organisation = Organisation.objects.get(orgId=orgId)
         except Organisation.DoesNotExist:
             return Response({
                 'status': 'Not found',
@@ -147,9 +147,9 @@ class AddUserToOrganisationView(generics.GenericAPIView):
                 'statusCode': 404
             }, status=status.HTTP_404_NOT_FOUND)
 
-        user_id = request.data.get('user_id')
+        userId = request.data.get('userId')
         try:
-            user = User.objects.get(user_id=user_id)
+            user = User.objects.get(userId=userId)
         except User.DoesNotExist:
             return Response({
                 'status': 'Not found',

@@ -16,8 +16,8 @@ class RegisterEndpointTests(APITestCase):
     def test_registration_success(self):
         url = reverse('register')
         data = {
-            "first_name": "Test",
-            "last_name": "User",
+            "firstName": "Test",
+            "lastName": "User",
             "email": "testuser@example.com",
             "password": "testpassword123",
             "phone": "1234567890"
@@ -32,8 +32,8 @@ class RegisterEndpointTests(APITestCase):
     def test_registration_validation_error(self):
         url = reverse('register')
         data = {
-            "first_name": "Test",
-            "last_name": "User",
+            "firstName": "Test",
+            "lastName": "User",
             "email": "invalid-email",
             "password": "testpassword123",
             "phone": "1234567890"
@@ -47,8 +47,8 @@ class RegisterEndpointTests(APITestCase):
     def test_registration_database_constraint(self):
         url = reverse('register')
         data = {
-            "first_name": "Test",
-            "last_name": "User",
+            "firstName": "Test",
+            "lastName": "User",
             "email": "duplicate@example.com",
             "password": "testpassword123",
             "phone": "1234567890"
@@ -56,8 +56,8 @@ class RegisterEndpointTests(APITestCase):
         # Create a user with the same email
         User.objects.create_user(
             email="duplicate@example.com",
-            first_name="Test",
-            last_name="User",
+            firstName="Test",
+            lastName="User",
             password="testpassword123"
         )
         response = self.client.post(url, data, format='json')
@@ -67,10 +67,10 @@ class RegisterEndpointTests(APITestCase):
         self.assertEqual(response.data['message'], 'Validation failed')
         self.assertFalse(Organisation.objects.filter(name="Test's Organisation").exists())
 
-    def test_missing_required_first_name(self):
+    def test_missing_required_firstName(self):
         url = reverse('register')
         data = {
-            "last_name": "User",
+            "lastName": "User",
             "email": "testuser@example.com",
             "password": "testpassword123",
             "phone": "1234567890"
@@ -81,10 +81,10 @@ class RegisterEndpointTests(APITestCase):
         self.assertEqual(response.data['status'], 'error')
         self.assertEqual(response.data['message'], 'Validation failed')
     
-    def test_missing_required_last_name(self):
+    def test_missing_required_lastName(self):
         url = reverse('register')
         data = {
-            "first_name": "User",
+            "firstName": "User",
             "email": "testuser@example.com",
             "password": "testpassword123",
             "phone": "1234567890"
@@ -98,8 +98,8 @@ class RegisterEndpointTests(APITestCase):
     def test_missing_required_email(self):
         url = reverse('register')
         data = {
-            "last_name": "User",
-            "first_name": "tOne",
+            "lastName": "User",
+            "firstName": "tOne",
             "password": "testpassword123",
             "phone": "1234567890"
         }
@@ -112,8 +112,8 @@ class RegisterEndpointTests(APITestCase):
     def test_missing_required_password(self):
         url = reverse('register')
         data = {
-            "last_name": "User",
-            "first_name": "tOne",
+            "lastName": "User",
+            "firstName": "tOne",
             "email": "testuser@example.com",
             "phone": "1234567890"
         }
@@ -130,8 +130,8 @@ class LoginEndpointTests(APITestCase):
         self.client = APIClient()
         self.user = User.objects.create_user(
             email="testuser@example.com",
-            first_name="Test",
-            last_name="User",
+            firstName="Test",
+            lastName="User",
             password="testpassword123"
         )
 
@@ -163,8 +163,8 @@ class TokenGenerationTests(APITestCase):
     def setUp(self):
         self.user = User.objects.create_user(
             email="testuser@example.com",
-            first_name="Test",
-            last_name="User",
+            firstName="Test",
+            lastName="User",
             password="testpassword123"
         )
 
@@ -173,7 +173,7 @@ class TokenGenerationTests(APITestCase):
         # print(refresh.payload)
         # print(refresh.access_token.payload)
         self.assertIsNotNone(refresh.access_token)
-        self.assertEqual((refresh.access_token['user_id']), str(self.user.user_id))
+        self.assertEqual((refresh.access_token['userId']), str(self.user.userId))
 
     def test_token_expiration(self):
         refresh = CustomRefreshToken.for_user(self.user)
@@ -191,9 +191,9 @@ class TokenGenerationTests(APITestCase):
         # print(access_token.payload)
 
         # Access attributes from the token payload directly
-        self.assertEqual(str(access_token.payload['user_id']), str(self.user.user_id))
+        self.assertEqual(str(access_token.payload['userId']), str(self.user.userId))
         # self.assertEqual(access_token.payload['email'], self.user.email)
-        # self.assertEqual(access_token.payload['first_name'], self.user.first_name)
+        # self.assertEqual(access_token.payload['firstName'], self.user.firstName)
 
 
 class OrganisationAccessTests(APITestCase):
@@ -202,14 +202,14 @@ class OrganisationAccessTests(APITestCase):
         self.client = APIClient()
         self.user1 = User.objects.create_user(
             email="user1@example.com",
-            first_name="User1",
-            last_name="One",
+            firstName="User1",
+            lastName="One",
             password="password123"
         )
         self.user2 = User.objects.create_user(
             email="user2@example.com",
-            first_name="User2",
-            last_name="Two",
+            firstName="User2",
+            lastName="Two",
             password="password123"
         )
         self.org1 = Organisation.objects.create(name="User1's Organisation")
@@ -222,13 +222,13 @@ class OrganisationAccessTests(APITestCase):
         response = self.client.get(reverse('organisation-list'))
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         # Check that user1 can only see org1
-        org_ids = [org['org_id'] for org in response.data]
-        self.assertIn(str(self.org1.org_id), org_ids)
-        self.assertNotIn(str(self.org2.org_id), org_ids)
+        orgIds = [org['orgId'] for org in response.data]
+        self.assertIn(str(self.org1.orgId), orgIds)
+        self.assertNotIn(str(self.org2.orgId), orgIds)
 
     def test_organisation_access_forbidden(self):
         self.client.force_authenticate(user=self.user1)
-        response = self.client.get(reverse('organisation-detail', kwargs={'org_id': str(self.org2.org_id)}))
+        response = self.client.get(reverse('organisation-detail', kwargs={'orgId': str(self.org2.orgId)}))
         self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
 
 
@@ -242,8 +242,8 @@ class UserAuthE2ETest(APITestCase):
         cls.login_url = reverse('login')
         cls.create_org_url = reverse('organisation-create')
         cls.user_data = {
-            'first_name': 'John',
-            'last_name': 'Doe',
+            'firstName': 'John',
+            'lastName': 'Doe',
             'email': 'john@example.com',
             'password': 'password123',
             'phone': '1234567890'
@@ -270,7 +270,7 @@ class UserAuthE2ETest(APITestCase):
         self.client.credentials(HTTP_AUTHORIZATION='Bearer ' + token)
         response = self.client.post(self.create_org_url, self.org_data, format='json')
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
-        return response.data['data']['org_id']
+        return response.data['data']['orgId']
 
     def test_user_registration_and_login(self):
         self.register_user()
@@ -279,13 +279,13 @@ class UserAuthE2ETest(APITestCase):
     def test_create_organisation_and_add_user(self):
         self.register_user()
         token = self.login_user()
-        org_id = self.create_organisation(token)
+        orgId = self.create_organisation(token)
 
         # Check if user exists
         user = User.objects.get(email=self.user_data['email'])
-        add_user_url = reverse('add-user-to-organisation', kwargs={'org_id': org_id})
+        add_user_url = reverse('add-user-to-organisation', kwargs={'orgId': orgId})
         add_user_data = {
-            'user_id': str(user.user_id)
+            'userId': str(user.userId)
         }
         response = self.client.post(add_user_url, add_user_data, format='json')
         self.assertEqual(response.status_code, status.HTTP_200_OK)

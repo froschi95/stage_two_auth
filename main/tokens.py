@@ -7,6 +7,6 @@ class CustomRefreshToken(SimpleJWTRefreshToken):
     @classmethod
     def for_user(cls, user):
         token = super().for_user(user)
-        # Customize payload here to include user_id as UUID
-        token.payload['user_id'] = str(user.user_id)
+        # Customize payload here to include userId as UUID
+        token.payload['userId'] = str(user.userId)
         return token
