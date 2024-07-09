@@ -32,16 +32,17 @@ ALLOWED_HOSTS = config('ALLOWED_HOSTS', default='', cast=lambda v: [s.strip() fo
 # Application definition
 
 INSTALLED_APPS = [
+    'django.contrib.admin',
+    'django.contrib.auth',
+    'django.contrib.contenttypes',
+    # 'django.contrib.contenttypes.models.ContentType',
+    'django.contrib.sessions',
+    'django.contrib.messages',
+    'django.contrib.staticfiles',
     'rest_framework',
     'rest_framework_simplejwt',
     'drf_spectacular',
     'main',
-    'django.contrib.admin',
-    'django.contrib.auth',
-    'django.contrib.contenttypes',
-    'django.contrib.sessions',
-    'django.contrib.messages',
-    'django.contrib.staticfiles',
 ]
 
 MIDDLEWARE = [
@@ -132,8 +133,8 @@ REST_FRAMEWORK = {
 }
 
 SIMPLE_JWT = {
-    'USER_ID_FIELD': 'user_id',
-    'USER_ID_CLAIM': 'user_id',
+    'USER_ID_FIELD': 'userId',
+    'USER_ID_CLAIM': 'userId',
 }
 
 

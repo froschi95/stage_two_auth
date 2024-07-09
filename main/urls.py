@@ -4,7 +4,7 @@ from .views import RegisterView, LoginView, UserDetailView, OrganisationListView
 urlpatterns = [
     path('auth/register', RegisterView.as_view(), name='register'),
     path('auth/login', LoginView.as_view(), name='login'),
-    path('api/users/<str:id>', UserDetailView.as_view(), name='user-detail'),
+    path('api/users/<str:pk>', UserDetailView.as_view(), name='user-detail'),
     path('api/organisations/create', OrganisationCreateView.as_view(), name='organisation-create'),
     path('api/organisations/<str:orgId>/users', AddUserToOrganisationView.as_view(), name='add-user-to-organisation'),
     path('api/organisations/<str:orgId>', OrganisationDetailView.as_view(), name='organisation-detail'),
