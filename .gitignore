@@ -1,6 +1,10 @@
+.ebextensions
+.ebextensions/
+.ebextensions/*
+
 .env
 stenv/*
-.ebextensions/*
+
 
 # Elastic Beanstalk Files
 .elasticbeanstalk/*
