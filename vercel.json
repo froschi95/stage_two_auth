@@ -2,29 +2,27 @@
   "version": 2,
   "builds": [
     {
-      "src": "stage_two/wsgi.py",
+      "src": "manage.py",
       "use": "@vercel/python",
-      "config": {
-        "maxLambdaSize": "15mb",
-        "runtime": "python3.10"
-      }
-    },
-    {
-      "src": "build.sh",
-      "use": "@vercel/static-build",
-      "config": {
-        "distDir": "staticfiles_build"
-      }
+      "config": { "maxLambdaSize": "15mb" }
     }
   ],
   "routes": [
     {
-      "src": "/static/(.*)",
-      "dest": "/static/$1"
-    },
-    {
       "src": "/(.*)",
-      "dest": "stage_two/wsgi.py"
+      "dest": "manage.py"
     }
-  ]
+  ],
+  "build": {
+    "env": {
+      "DJANGO_SECRET_KEY": "@django-secret-key",
+      "DB_NAME": "@db-name",
+      "DB_USER": "@db-user",
+      "DB_PASSWORD": "@db-password",
+      "DB_HOST": "@db-host"
+    },
+    "scripts": {
+      "build": "python manage.py migrate"
+    }
+  }
 }
