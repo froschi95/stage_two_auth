@@ -20,9 +20,6 @@
       "DB_USER": "@db-user",
       "DB_PASSWORD": "@db-password",
       "DB_HOST": "@db-host"
-    },
-    "scripts": {
-      "build": "python manage.py migrate"
     }
   }
 }
