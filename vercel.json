@@ -12,14 +12,5 @@
       "src": "/(.*)",
       "dest": "manage.py"
     }
-  ],
-  "build": {
-    "env": {
-      "DJANGO_SECRET_KEY": "@django-secret-key",
-      "DB_NAME": "@db-name",
-      "DB_USER": "@db-user",
-      "DB_PASSWORD": "@db-password",
-      "DB_HOST": "@db-host"
-    }
-  }
+  ]
 }
